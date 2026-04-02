@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#E65100">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="हनुमान चालीसा">
+<meta name="description" content="Read Hanuman Chalisa beautifully on your phone">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>हनुमान चालीसा</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFF9F0;
+    --bg2: #FFF3E0;
+    --text: #3E2723;
+    --text2: #5D4037;
+    --accent: #E65100;
+    --accent2: #FF8F00;
+    --accent-glow: rgba(230, 81, 0, 0.12);
+    --card: #FFFFFF;
+    --card-border: rgba(230, 81, 0, 0.08);
+    --divider: rgba(230, 81, 0, 0.10);
+    --toolbar-bg: rgba(255, 249, 240, 0.92);
+    --shadow: 0 2px 20px rgba(62, 39, 35, 0.06);
+    --shadow-lg: 0 8px 40px rgba(62, 39, 35, 0.1);
+    --bead: #E65100;
+    --bead-done: #E65100;
+    --bead-empty: rgba(230, 81, 0, 0.1);
+    --radius: 16px;
+    --font-size: 22px;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1210;
+    --bg2: #241C18;
+    --text: #F5E6D3;
+    --text2: #BCAAA4;
+    --accent: #FF9E40;
+    --accent2: #FFB74D;
+    --accent-glow: rgba(255, 158, 64, 0.10);
+    --card: #2C2220;
+    --card-border: rgba(255, 158, 64, 0.06);
+    --divider: rgba(255, 158, 64, 0.08);
+    --toolbar-bg: rgba(26, 18, 16, 0.95);
+    --shadow: 0 2px 20px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+    --bead: #FF9E40;
+    --bead-done: #FF9E40;
+    --bead-empty: rgba(255, 158, 64, 0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; overscroll-behavior: none; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.45s ease, color 0.35s ease;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════ TOOLBAR ═══════════════════ */
+  .toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 10px 14px;
+    background: var(--toolbar-bg);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+  }
+  .toolbar.hide { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+
+  .tb-title {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 17px; color: var(--accent); font-weight: 400;
+  }
+
+  .tb-actions { display: flex; gap: 2px; }
+
+  .tb-btn {
+    width: 42px; height: 42px; border-radius: 12px; border: none;
+    background: transparent; color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s ease; position: relative;
+  }
+  .tb-btn:active { transform: scale(0.9); }
+  .tb-btn.on { color: var(--accent); background: var(--accent-glow); }
+  .tb-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ═══════════════════ FONT PANEL ═══════════════════ */
+  .font-panel {
+    position: fixed; top: 58px; right: 12px; z-index: 99;
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 18px 20px;
+    box-shadow: var(--shadow-lg); width: 220px;
+    opacity: 0; transform: translateY(-10px) scale(0.96);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .font-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .fp-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text2); margin-bottom: 14px; font-weight: 500;
+  }
+  .fp-row { display: flex; align-items: center; gap: 12px; }
+  .fp-row span { font-family: 'Tiro Devanagari Hindi', serif; color: var(--text2); }
+  .fp-row span:first-child { font-size: 14px; }
+  .fp-row span:last-child { font-size: 24px; }
+
+  input[type="range"] {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 3px; border-radius: 2px; background: var(--bead-empty); outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+    box-shadow: 0 2px 10px rgba(230, 81, 0, 0.3);
+  }
+
+  /* ═══════════════════ CONTENT ═══════════════════ */
+  .page { max-width: 680px; margin: 0 auto; padding: 72px 20px 200px; transition: all 0.4s ease; }
+  body.reader .page { max-width: 540px; padding-top: 24px; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 44px 0 40px; animation: fadeIn 0.8s ease; }
+  body.reader .hero { display: none; }
+
+  .hero-om { font-size: 52px; color: var(--accent); opacity: 0.6; display: block; margin-bottom: 4px; line-height: 1; }
+  .hero h1 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 34px; font-weight: 400; color: var(--text); line-height: 1.3;
+  }
+  .hero .sub {
+    font-size: 13px; color: var(--text2); font-weight: 300;
+    letter-spacing: 2.5px; text-transform: uppercase; margin-top: 4px;
+  }
+  .hero-line {
+    width: 48px; height: 1.5px; margin: 28px auto 0;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  /* Section labels */
+  .sec-label {
+    text-align: center; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 3.5px; color: var(--accent); font-weight: 500;
+    margin: 44px 0 18px; opacity: 0.7;
+  }
+  body.reader .sec-label { display: none; }
+
+  /* Verses */
+  .v {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: var(--font-size);
+    line-height: 2; color: var(--text);
+    text-align: center; padding: 14px 4px;
+    border-bottom: 1px solid var(--divider);
+    transition: font-size 0.3s ease, opacity 0.55s ease, transform 0.55s ease;
+    opacity: 0; transform: translateY(14px);
+  }
+  .v.vis { opacity: 1; transform: translateY(0); }
+  .v:last-of-type { border-bottom: none; }
+  .v .l { display: block; }
+
+  body.reader .v {
+    text-align: left; border-bottom: none; padding: 10px 0;
+    line-height: 2.1;
+  }
+
+  /* Reader exit */
+  .reader-x {
+    position: fixed; top: 14px; right: 14px; z-index: 110;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--card); border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    display: none; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); transition: all 0.3s;
+  }
+  .reader-x svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+  body.reader .reader-x { display: flex; }
+  body.reader .toolbar { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+
+  /* ═══════════════════ MALA COUNTER ═══════════════════ */
+  .mala { text-align: center; padding: 56px 0 20px; border-top: 1px solid var(--divider); margin-top: 36px; }
+  body.reader .mala { display: none; }
+
+  .mala-head {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 3.5px;
+    color: var(--accent); font-weight: 500; margin-bottom: 28px;
+  }
+
+  .bead-ring { width: 220px; height: 220px; margin: 0 auto 20px; position: relative; }
+  .bead-ring svg { width: 100%; height: 100%; }
+
+  .mala-num {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 80px; font-weight: 400; color: var(--accent);
+    line-height: 1; transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mala-num.pop { transform: scale(1.18); }
+
+  .mala-sub { font-size: 13px; color: var(--text2); margin-top: 2px; font-weight: 300; }
+
+  .done-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 28px; padding: 16px 40px; border-radius: 60px; border: none;
+    background: var(--accent); color: #fff;
+    font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; letter-spacing: 0.3px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 28px rgba(230, 81, 0, 0.22);
+  }
+  .done-btn:active { transform: scale(0.95); }
+  .done-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+
+  .rst-btn {
+    display: inline-block; margin-top: 18px;
+    background: none; border: none; color: var(--text2);
+    font-size: 11px; cursor: pointer; font-family: 'Outfit', sans-serif;
+    opacity: 0.5; transition: all 0.2s; letter-spacing: 0.5px;
+  }
+  .rst-btn:active { opacity: 1; color: var(--accent); }
+
+  /* ═══════════════════ PROGRESS BAR ═══════════════════ */
+  .progress-track {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    z-index: 101; background: transparent;
+  }
+  .progress-bar {
+    height: 100%; width: 0%; background: var(--accent);
+    transition: width 0.15s ease; border-radius: 0 2px 2px 0;
+    opacity: 0.7;
+  }
+  body.reader .progress-track { top: 0; }
+
+  /* ═══════════════════ CELEBRATION ═══════════════════ */
+  .celeb {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(10px);
+    opacity: 0; pointer-events: none; transition: opacity 0.4s;
+  }
+  .celeb.on { opacity: 1; pointer-events: auto; }
+
+  .celeb-card {
+    background: var(--card); border-radius: 28px;
+    padding: 44px 32px 36px; text-align: center;
+    max-width: 300px; width: 88%;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.88) translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .celeb.on .celeb-card { transform: scale(1) translateY(0); }
+
+  .celeb-em { font-size: 52px; display: block; margin-bottom: 16px; }
+  .celeb-card h3 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 26px; color: var(--accent); margin-bottom: 8px; font-weight: 400;
+  }
+  .celeb-card p { font-size: 14px; color: var(--text2); line-height: 1.7; }
+  .celeb-card .celeb-count {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 36px; color: var(--accent); margin: 12px 0 4px;
+  }
+  .celeb-close {
+    margin-top: 24px; padding: 11px 36px; border-radius: 40px;
+    border: 1px solid var(--divider); background: transparent;
+    color: var(--text); font-family: 'Outfit', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.2s;
+  }
+  .celeb-close:active { border-color: var(--accent); color: var(--accent); }
+
+  /* ═══════════════════ SCROLL TOP ═══════════════════ */
+  .go-top {
+    position: fixed; bottom: 24px; right: 20px; z-index: 90;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--card); border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2);
+    opacity: 0; transform: translateY(20px); pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .go-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .go-top svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* ═══════════════════ INSTALL BANNER ═══════════════════ */
+  .install-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+    padding: 14px 16px; background: var(--card);
+    border-top: 1px solid var(--card-border); box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    display: none; align-items: center; gap: 12px;
+    animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .install-bar.show { display: flex; }
+  .install-bar .ib-text { flex: 1; font-size: 13px; color: var(--text2); line-height: 1.4; }
+  .install-bar .ib-text strong { color: var(--text); font-weight: 500; display: block; font-size: 14px; }
+  .install-bar .ib-btn {
+    padding: 10px 20px; border-radius: 40px; border: none;
+    background: var(--accent); color: #fff;
+    font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+  }
+  .install-bar .ib-x {
+    width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: transparent; color: var(--text2); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+
+  /* ═══════════════════ ENDING ═══════════════════ */
+  .ending {
+    text-align: center; margin-top: 36px; padding: 4px 0;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    color: var(--accent); font-size: 15px; line-height: 2; opacity: 0.8;
+  }
+  body.reader .ending { display: none; }
+
+  /* ═══════════════════ ANIMATIONS ═══════════════════ */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 2px; }
+
+  /* Safe areas */
+  @supports (padding-top: env(safe-area-inset-top)) {
+    .toolbar { padding-top: calc(10px + env(safe-area-inset-top)); }
+    .page { padding-top: calc(72px + env(safe-area-inset-top)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress-track"><div class="progress-bar" id="pbar"></div></div>
+
+<!-- Toolbar -->
+<header class="toolbar" id="toolbar">
+  <span class="tb-title">हनुमान चालीसा</span>
+  <nav class="tb-actions">
+    <button class="tb-btn" id="btnFont" aria-label="Font size">
+      <svg viewBox="0 0 24 24"><path d="M4 7V4h16v3"/><path d="M12 4v16"/><path d="M8 20h8"/></svg>
+    </button>
+    <button class="tb-btn" id="btnRead" aria-label="Reader mode">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    </button>
+    <button class="tb-btn" id="btnDark" aria-label="Dark mode">
+      <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </nav>
+</header>
+
+<!-- Font Panel -->
+<div class="font-panel" id="fontPanel">
+  <div class="fp-label">Text Size</div>
+  <div class="fp-row">
+    <span>अ</span>
+    <input type="range" id="fontRange" min="16" max="36" value="22">
+    <span>अ</span>
+  </div>
+</div>
+
+<!-- Reader exit -->
+<button class="reader-x" id="readerX" aria-label="Exit reader">
+  <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</button>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<main class="page" id="page">
+
+  <div class="hero">
+    <span class="hero-om">ॐ</span>
+    <h1>श्री हनुमान चालीसा</h1>
+    <p class="sub">Shri Hanuman Chalisa</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <p class="sec-label">॥ दोहा ॥</p>
+
+  <div class="v"><span class="l">श्रीगुरु चरन सरोज रज निज मनु मुकुरु सुधारि।</span><span class="l">बरनउँ रघुबर बिमल जसु जो दायकु फल चारि॥</span></div>
+  <div class="v"><span class="l">बुद्धिहीन तनु जानिके सुमिरौं पवन-कुमार।</span><span class="l">बल बुद्धि बिद्या देहु मोहिं हरहु कलेस बिकार॥</span></div>
+
+  <p class="sec-label">॥ चौपाई ॥</p>
+
+  <div class="v"><span class="l">जय हनुमान ज्ञान गुन सागर।</span><span class="l">जय कपीस तिहुँ लोक उजागर॥</span></div>
+  <div class="v"><span class="l">राम दूत अतुलित बल धामा।</span><span class="l">अंजनि-पुत्र पवनसुत नामा॥</span></div>
+  <div class="v"><span class="l">महाबीर बिक्रम बजरंगी।</span><span class="l">कुमति निवार सुमति के संगी॥</span></div>
+  <div class="v"><span class="l">कंचन बरन बिराज सुबेसा।</span><span class="l">कानन कुंडल कुँचित केसा॥</span></div>
+  <div class="v"><span class="l">हाथ बज्र औ ध्वजा बिराजै।</span><span class="l">काँधे मूँज जनेऊ साजै॥</span></div>
+  <div class="v"><span class="l">संकर सुवन केसरीनंदन।</span><span class="l">तेज प्रताप महा जग बंदन॥</span></div>
+  <div class="v"><span class="l">विद्यावान गुनी अति चातुर।</span><span class="l">राम काज करिबे को आतुर॥</span></div>
+  <div class="v"><span class="l">प्रभु चरित्र सुनिबे को रसिया।</span><span class="l">राम लखन सीता मन बसिया॥</span></div>
+  <div class="v"><span class="l">सूक्ष्म रूप धरि सियहिं दिखावा।</span><span class="l">बिकट रूप धरि लंक जरावा॥</span></div>
+  <div class="v"><span class="l">भीम रूप धरि असुर सँहारे।</span><span class="l">रामचंद्र के काज सँवारे॥</span></div>
+  <div class="v"><span class="l">लाय सजीवन लखन जियाये।</span><span class="l">श्रीरघुबीर हरषि उर लाये॥</span></div>
+  <div class="v"><span class="l">रघुपति कीन्ही बहुत बड़ाई।</span><span class="l">तुम मम प्रिय भरतहि सम भाई॥</span></div>
+  <div class="v"><span class="l">सहस बदन तुम्हरो जस गावैं।</span><span class="l">अस कहि श्रीपति कंठ लगावैं॥</span></div>
+  <div class="v"><span class="l">सनकादिक ब्रह्मादि मुनीसा।</span><span class="l">नारद सारद सहित अहीसा॥</span></div>
+  <div class="v"><span class="l">जम कुबेर दिगपाल जहाँ ते।</span><span class="l">कबि कोबिद कहि सके कहाँ ते॥</span></div>
+  <div class="v"><span class="l">तुम उपकार सुग्रीवहिं कीन्हा।</span><span class="l">राम मिलाय राजपद दीन्हा॥</span></div>
+  <div class="v"><span class="l">तुम्हरो मंत्र बिभीषन माना।</span><span class="l">लंकेश्वर भए सब जग जाना॥</span></div>
+  <div class="v"><span class="l">जुग सहस्र जोजन पर भानू।</span><span class="l">लील्यो ताहि मधुर फल जानू॥</span></div>
+  <div class="v"><span class="l">प्रभु मुद्रिका मेलि मुख माहीं।</span><span class="l">जलधि लाँघि गये अचरज नाहीं॥</span></div>
+  <div class="v"><span class="l">दुर्गम काज जगत के जेते।</span><span class="l">सुगम अनुग्रह तुम्हरे तेते॥</span></div>
+  <div class="v"><span class="l">राम दुआरे तुम रखवारे।</span><span class="l">होत न आज्ञा बिनु पैसारे॥</span></div>
+  <div class="v"><span class="l">सब सुख लहैं तुम्हारी सरना।</span><span class="l">तुम रक्षक काहू को डर ना॥</span></div>
+  <div class="v"><span class="l">आपन तेज सम्हारो आपै।</span><span class="l">तीनों लोक हाँक तें काँपै॥</span></div>
+  <div class="v"><span class="l">भूत पिसाच निकट नहिं आवै।</span><span class="l">महाबीर जब नाम सुनावै॥</span></div>
+  <div class="v"><span class="l">नासै रोग हरै सब पीरा।</span><span class="l">जपत निरंतर हनुमत बीरा॥</span></div>
+  <div class="v"><span class="l">संकट तें हनुमान छुड़ावै।</span><span class="l">मन क्रम बचन ध्यान जो लावै॥</span></div>
+  <div class="v"><span class="l">सब पर राम तपस्वी राजा।</span><span class="l">तिन के काज सकल तुम साजा॥</span></div>
+  <div class="v"><span class="l">और मनोरथ जो कोई लावै।</span><span class="l">सोइ अमित जीवन फल पावै॥</span></div>
+  <div class="v"><span class="l">चारों जुग परताप तुम्हारा।</span><span class="l">है परसिद्ध जगत उजियारा॥</span></div>
+  <div class="v"><span class="l">साधु-संत के तुम रखवारे।</span><span class="l">असुर निकंदन राम दुलारे॥</span></div>
+  <div class="v"><span class="l">अष्ट सिद्धि नौ निधि के दाता।</span><span class="l">अस बर दीन जानकी माता॥</span></div>
+  <div class="v"><span class="l">राम रसायन तुम्हरे पासा।</span><span class="l">सदा रहो रघुपति के दासा॥</span></div>
+  <div class="v"><span class="l">तुम्हरे भजन राम को पावै।</span><span class="l">जनम-जनम के दुख बिसरावै॥</span></div>
+  <div class="v"><span class="l">अन्तकाल रघुबर पुर जाई।</span><span class="l">जहाँ जन्म हरि-भक्त कहाई॥</span></div>
+  <div class="v"><span class="l">और देवता चित्त न धरई।</span><span class="l">हनुमत सेई सर्ब सुख करई॥</span></div>
+  <div class="v"><span class="l">संकट कटै मिटै सब पीरा।</span><span class="l">जो सुमिरै हनुमत बलबीरा॥</span></div>
+  <div class="v"><span class="l">जय जय जय हनुमान गोसाईं।</span><span class="l">कृपा करहु गुरुदेव की नाईं॥</span></div>
+  <div class="v"><span class="l">जो सत बार पाठ कर कोई।</span><span class="l">छूटहि बंदि महा सुख होई॥</span></div>
+  <div class="v"><span class="l">जो यह पढ़ै हनुमान चालीसा।</span><span class="l">होय सिद्धि साखी गौरीसा॥</span></div>
+  <div class="v"><span class="l">तुलसीदास सदा हरि चेरा।</span><span class="l">कीजै नाथ हृदय महँ डेरा॥</span></div>
+
+  <p class="sec-label">॥ दोहा ॥</p>
+
+  <div class="v"><span class="l">पवनतनय संकट हरन मंगल मूरति रूप।</span><span class="l">राम लखन सीता सहित हृदय बसहु सुर भूप॥</span></div>
+
+  <div class="ending">
+    ॥ सियावर रामचंद्र की जय ॥<br>
+    ॥ पवनसुत हनुमान की जय ॥
+  </div>
+
+  <!-- ═══════════════════ MALA COUNTER ═══════════════════ -->
+  <section class="mala" id="mala">
+    <p class="mala-head">पाठ गणना · Reading Counter</p>
+    <div class="bead-ring" id="beadRing"></div>
+    <div class="mala-num" id="mNum">0</div>
+    <p class="mala-sub">times completed</p>
+    <button class="done-btn" id="doneBtn">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      पाठ पूर्ण · Mark Complete
+    </button>
+    <br><button class="rst-btn" id="rstBtn">Reset counter</button>
+  </section>
+
+</main>
+
+<!-- Scroll to top -->
+<button class="go-top" id="goTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- Celebration -->
+<div class="celeb" id="celeb">
+  <div class="celeb-card">
+    <span class="celeb-em">🙏</span>
+    <h3>जय श्री राम!</h3>
+    <div class="celeb-count" id="celebCount">1</div>
+    <p>You've completed reading<br>Hanuman Chalisa. May Bajrangbali<br>bless you with strength & wisdom.</p>
+    <button class="celeb-close" id="celebClose">जय बजरंगबली</button>
+  </div>
+</div>
+
+<!-- Install Banner -->
+<div class="install-bar" id="installBar">
+  <div class="ib-text"><strong>Install App</strong>Read offline anytime</div>
+  <button class="ib-btn" id="installBtn">Install</button>
+  <button class="ib-x" id="installX">&times;</button>
+</div>
+
+<script>
+(function() {
+  // ── State ──
+  const $ = id => document.getElementById(id);
+  let dark = localStorage.getItem('hc-dark') === '1';
+  let reader = false;
+  let fontSize = +(localStorage.getItem('hc-fs') || 22);
+  let count = +(localStorage.getItem('hc-count') || 0);
+  let fpOpen = false;
+  const BEADS = 27;
+
+  // ── Init ──
+  if (dark) { document.documentElement.setAttribute('data-theme','dark'); $('btnDark').classList.add('on'); }
+  document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+  $('fontRange').value = fontSize;
+  updateCount();
+  drawBeads();
+  observeVerses();
+
+  // ── Dark Mode ──
+  $('btnDark').onclick = () => {
+    dark = !dark;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    $('btnDark').classList.toggle('on', dark);
+    localStorage.setItem('hc-dark', dark ? '1' : '0');
+  };
+
+  // ── Reader ──
+  $('btnRead').onclick = () => toggleReader();
+  $('readerX').onclick = () => toggleReader();
+  function toggleReader() {
+    reader = !reader;
+    document.body.classList.toggle('reader', reader);
+    $('btnRead').classList.toggle('on', reader);
+    if (reader) closeFP();
+  }
+
+  // ── Font Panel ──
+  $('btnFont').onclick = (e) => { e.stopPropagation(); fpOpen = !fpOpen; syncFP(); };
+  $('fontRange').oninput = (e) => {
+    fontSize = +e.target.value;
+    document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+    localStorage.setItem('hc-fs', fontSize);
+  };
+  document.addEventListener('click', (e) => {
+    if (fpOpen && !e.target.closest('#fontPanel') && !e.target.closest('#btnFont')) closeFP();
+  });
+  function syncFP() { $('fontPanel').classList.toggle('open', fpOpen); $('btnFont').classList.toggle('on', fpOpen); }
+  function closeFP() { fpOpen = false; syncFP(); }
+
+  // ── Beads ──
+  function drawBeads() {
+    const cx=110, cy=110, r=90;
+    let s = `<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">`;
+    // Subtle ring
+    s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bead-empty)" stroke-width="1" opacity="0.5"/>`;
+    for (let i = 0; i < BEADS; i++) {
+      const a = (i / BEADS) * 2 * Math.PI - Math.PI / 2;
+      const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+      s += `<circle class="bd" id="bd${i}" cx="${x}" cy="${y}" r="5.5" fill="var(--bead-empty)" style="transition:all .3s ease"/>`;
+    }
+    s += `<text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="30" fill="var(--accent)" opacity="0.2" font-family="serif">ॐ</text>`;
+    s += `</svg>`;
+    $('beadRing').innerHTML = s;
+    syncBeads();
+  }
+
+  function syncBeads() {
+    const filled = count % BEADS;
+    const allDone = count > 0 && filled === 0;
+    for (let i = 0; i < BEADS; i++) {
+      const b = $(`bd${i}`);
+      if (!b) continue;
+      const on = allDone || i < filled;
+      b.setAttribute('fill', on ? 'var(--bead-done)' : 'var(--bead-empty)');
+      b.setAttribute('r', on ? '7' : '5.5');
+      b.setAttribute('opacity', on ? '1' : '0.6');
+    }
+  }
+
+  function updateCount() { $('mNum').textContent = count; syncBeads(); }
+
+  // ── Mark Complete ──
+  $('doneBtn').onclick = () => {
+    count++;
+    localStorage.setItem('hc-count', count);
+    $('mNum').classList.add('pop');
+    setTimeout(() => $('mNum').classList.remove('pop'), 350);
+    updateCount();
+    // Celebration milestones
+    if ([1,7,11,21,51,101].includes(count) || count % 108 === 0) {
+      $('celebCount').textContent = count;
+      $('celeb').querySelector('.celeb-em').textContent = count >= 108 ? '🏆' : '🙏';
+      $('celeb').classList.add('on');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  $('rstBtn').onclick = () => {
+    if (confirm('Reset your reading count to 0?')) {
+      count = 0; localStorage.setItem('hc-count', 0); updateCount();
+    }
+  };
+
+  $('celebClose').onclick = () => $('celeb').classList.remove('on');
+  $('celeb').onclick = (e) => { if (e.target === $('celeb')) $('celeb').classList.remove('on'); };
+
+  // ── Verse Observer ──
+  function observeVerses() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.v').forEach(v => obs.observe(v));
+  }
+
+  // ── Scroll ──
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        $('pbar').style.width = docH > 0 ? ((scrollY / docH) * 100) + '%' : '0%';
+        $('goTop').classList.toggle('show', scrollY > 500);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  $('goTop').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // ── PWA Install ──
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    $('installBar').classList.add('show');
+  });
+  $('installBtn').onclick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    $('installBar').classList.remove('show');
+  };
+  $('installX').onclick = () => $('installBar').classList.remove('show');
+
+  // ── Register SW ──
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+})();
+</script>
+
+</body>
+</html>

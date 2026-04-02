@@ -1,0 +1,38 @@
+{
+  "name": "श्री हनुमान चालीसा",
+  "short_name": "हनुमान चालीसा",
+  "description": "Read Hanuman Chalisa beautifully — offline, distraction-free",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#E65100",
+  "background_color": "#FFF9F0",
+  "lang": "hi",
+  "dir": "ltr",
+  "categories": ["books", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

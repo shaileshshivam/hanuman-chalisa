@@ -1,0 +1,10 @@
+{
+  "name": "hanuman-chalisa",
+  "version": "1.0.0",
+  "description": "A beautiful, offline-ready Hanuman Chalisa reader PWA",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public",
+    "build": "echo 'Static site — no build step required'"
+  }
+}

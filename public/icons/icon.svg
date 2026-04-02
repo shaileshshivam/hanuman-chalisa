@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8A00" />
+      <stop offset="100%" stop-color="#D32F2F" />
+    </linearGradient>
+
+    <linearGradient id="goldGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFD54F" />
+      <stop offset="100%" stop-color="#FFF9C4" />
+    </linearGradient>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bgGradient)" />
+
+  <circle cx="256" cy="220" r="140" fill="#FFFFFF" opacity="0.1" />
+  <circle cx="256" cy="220" r="100" fill="#FFFFFF" opacity="0.2" />
+  <circle cx="256" cy="220" r="60" fill="#FFFFFF" opacity="0.4" />
+
+  <g filter="url(#shadow)">
+    <rect x="244" y="140" width="24" height="160" rx="12" fill="url(#goldGradient)" />
+    <path d="M 256 70 L 270 100 L 242 100 Z" fill="url(#goldGradient)" />
+    <ellipse cx="256" cy="130" rx="45" ry="35" fill="url(#goldGradient)" />
+    <ellipse cx="256" cy="130" rx="55" ry="15" fill="#FFB300" opacity="0.8" />
+  </g>
+
+  <g filter="url(#shadow)">
+    <path d="M 140 370 Q 256 420 372 370 L 380 410 Q 256 460 132 410 Z" fill="#FFFFFF" opacity="0.95" />
+    <path d="M 140 360 Q 256 410 372 360 L 372 380 Q 256 430 140 380 Z" fill="#EEEEEE" />
+    <line x1="256" y1="390" x2="256" y2="445" stroke="#D32F2F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  </g>
+</svg>

@@ -1,0 +1,47 @@
+---
+import Head from '../components/Head.astro';
+import SplashScreen from '../components/SplashScreen.astro';
+import Toolbar from '../components/Toolbar.svelte';
+import FontPanel from '../components/FontPanel.svelte';
+import ScrollProgress from '../components/ScrollProgress.svelte';
+import PetalCanvas from '../components/PetalCanvas.svelte';
+import InstallBanner from '../components/InstallBanner.svelte';
+
+import '../styles/global.css';
+import '../styles/toolbar.css';
+import '../styles/verse.css';
+import '../styles/mala.css';
+import '../styles/modals.css';
+import '../styles/pwa.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <Head title={title} description={description} />
+</head>
+<body>
+  <PetalCanvas client:idle />
+  <SplashScreen />
+  <ScrollProgress client:load />
+  <Toolbar client:load />
+  <FontPanel client:load />
+
+  <slot />
+
+  <InstallBanner client:idle />
+
+  <script is:inline>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js'); });
+    }
+  </script>
+</body>
+</html>

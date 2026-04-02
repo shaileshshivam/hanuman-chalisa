@@ -1,0 +1,57 @@
+.toolbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 10px 14px;
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--card-border);
+  display: flex; align-items: center; justify-content: space-between;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+}
+.toolbar.hide { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+
+.tb-title {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 17px; color: var(--accent); font-weight: 400;
+}
+
+.tb-actions { display: flex; gap: 2px; }
+
+.tb-btn {
+  width: 42px; height: 42px; border-radius: 12px; border: none;
+  background: transparent; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s ease; position: relative;
+}
+.tb-btn:active { transform: scale(0.9); }
+.tb-btn.on { color: var(--accent); background: var(--accent-glow); }
+.tb-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.font-panel {
+  position: fixed; top: calc(64px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 99;
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 18px 20px;
+  box-shadow: var(--shadow-lg); width: 220px;
+  opacity: 0; transform: translateY(-10px) scale(0.96);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.font-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.fp-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text2); margin-bottom: 14px; font-weight: 500;
+}
+.fp-row { display: flex; align-items: center; gap: 12px; }
+.fp-row span { font-family: 'Tiro Devanagari Hindi', serif; color: var(--text2); }
+.fp-row span:first-child { font-size: 14px; }
+.fp-row span:last-child { font-size: 24px; }
+
+input[type="range"] {
+  flex: 1; -webkit-appearance: none; appearance: none;
+  height: 3px; border-radius: 2px; background: var(--bead-empty); outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); cursor: pointer;
+  box-shadow: 0 2px 10px rgba(230, 81, 0, 0.3);
+}

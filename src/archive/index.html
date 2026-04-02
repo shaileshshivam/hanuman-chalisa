@@ -118,7 +118,7 @@
 
   /* ═══════════════════ FONT PANEL ═══════════════════ */
   .font-panel {
-    position: fixed; top: 58px; right: 12px; z-index: 99;
+    position: fixed; top: calc(64px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 99;
     background: var(--card); border: 1px solid var(--card-border);
     border-radius: var(--radius); padding: 18px 20px;
     box-shadow: var(--shadow-lg); width: 220px;

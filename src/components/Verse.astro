@@ -1,0 +1,14 @@
+---
+interface Props {
+  line1: string;
+  line2: string;
+  index?: number;
+}
+
+const { line1, line2, index } = Astro.props;
+---
+
+<div class="v" data-verse={index}
+  <span class="l">{line1}</span>
+  <span class="l">{line2}</span>
+</div>

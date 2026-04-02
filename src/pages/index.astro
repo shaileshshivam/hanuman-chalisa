@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import VerseSection from '../components/VerseSection.astro';
+import Ending from '../components/Ending.astro';
+import MalaCounter from '../components/MalaCounter.svelte';
+import Celebration from '../components/Celebration.svelte';
+import ConfirmDialog from '../components/ConfirmDialog.svelte';
+import VerseObserver from '../components/VerseObserver.svelte';
+import ReadingBookmark from '../components/ReadingBookmark.svelte';
+import { hanumanChalisa } from '../data/chalisa';
+
+// Calculate cumulative start indices for each section
+let idx = 0;
+const sectionIndices = hanumanChalisa.sections.map((s) => {
+  const start = idx;
+  idx += s.verses.length;
+  return start;
+});
+---
+
+<Layout>
+  <main class="page" id="page">
+    <Hero title={hanumanChalisa.title} subtitle={hanumanChalisa.subtitle} />
+
+    {hanumanChalisa.sections.map((section, i) => (
+      <VerseSection section={section} startIndex={sectionIndices[i]} />
+    ))}
+
+    <Ending lines={hanumanChalisa.ending} />
+
+    <MalaCounter client:visible />
+  </main>
+
+  <ReadingBookmark client:load />
+  <Celebration client:idle />
+  <ConfirmDialog client:idle />
+  <VerseObserver client:load />
+</Layout>

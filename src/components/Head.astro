@@ -1,0 +1,56 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'श्री हनुमान चालीसा | Hanuman Chalisa',
+  description = 'Read Hanuman Chalisa beautifully — offline, distraction-free. A progressive web app for daily paath.',
+} = Astro.props;
+---
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#E65100" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1210" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content={description}>
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="हनुमान चालीसा">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="हनुमान चालीसा">
+
+<!-- Icons -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="श्री हनुमान चालीसा">
+<meta property="og:description" content="Read Hanuman Chalisa beautifully — offline, distraction-free">
+<meta property="og:image" content="/icons/icon-512.png">
+
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap"></noscript>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "श्री हनुमान चालीसा",
+  "alternateName": "Shri Hanuman Chalisa",
+  "author": { "@type": "Person", "name": "Tulsidas" },
+  "inLanguage": "hi",
+  "genre": "Devotional",
+  "about": { "@type": "Thing", "name": "Hanuman" }
+}
+</script>

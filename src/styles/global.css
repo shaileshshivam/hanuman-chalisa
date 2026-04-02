@@ -1,0 +1,75 @@
+:root {
+  --bg: #FFF9F0;
+  --bg2: #FFF3E0;
+  --text: #3E2723;
+  --text2: #5D4037;
+  --accent: #E65100;
+  --accent2: #FF8F00;
+  --accent-glow: rgba(230, 81, 0, 0.12);
+  --card: #FFFFFF;
+  --card-border: rgba(230, 81, 0, 0.08);
+  --divider: rgba(230, 81, 0, 0.10);
+  --toolbar-bg: rgba(255, 249, 240, 0.92);
+  --shadow: 0 2px 20px rgba(62, 39, 35, 0.06);
+  --shadow-lg: 0 8px 40px rgba(62, 39, 35, 0.1);
+  --bead: #E65100;
+  --bead-done: #E65100;
+  --bead-empty: rgba(230, 81, 0, 0.1);
+  --radius: 16px;
+  --font-size: 22px;
+}
+
+[data-theme="dark"] {
+  --bg: #1A1210;
+  --bg2: #241C18;
+  --text: #F5E6D3;
+  --text2: #BCAAA4;
+  --accent: #FF9E40;
+  --accent2: #FFB74D;
+  --accent-glow: rgba(255, 158, 64, 0.10);
+  --card: #2C2220;
+  --card-border: rgba(255, 158, 64, 0.06);
+  --divider: rgba(255, 158, 64, 0.08);
+  --toolbar-bg: rgba(26, 18, 16, 0.95);
+  --shadow: 0 2px 20px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+  --bead: #FF9E40;
+  --bead-done: #FF9E40;
+  --bead-empty: rgba(255, 158, 64, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; overscroll-behavior: none; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.45s ease, color 0.35s ease;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 2px; }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* Safe areas */
+@supports (padding: env(safe-area-inset-top)) {
+  .toolbar { padding-top: calc(10px + env(safe-area-inset-top)); }
+  .page { padding-top: calc(72px + env(safe-area-inset-top)); padding-bottom: calc(200px + env(safe-area-inset-bottom)); }
+  .install-bar { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .go-top { bottom: calc(24px + env(safe-area-inset-bottom)); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .v { opacity: 1; transform: none; }
+}

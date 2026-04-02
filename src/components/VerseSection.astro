@@ -1,0 +1,16 @@
+---
+import type { Section } from '../data/types';
+import Verse from './Verse.astro';
+
+interface Props {
+  section: Section;
+  startIndex?: number;
+}
+
+const { section, startIndex = 0 } = Astro.props;
+---
+
+<p class="sec-label">{section.label}</p>
+{section.verses.map((verse, i) => (
+  <Verse line1={verse.line1} line2={verse.line2} index={startIndex + i} />
+))}

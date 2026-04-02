@@ -1,0 +1,30 @@
+---
+---
+
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <svg class="splash-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF8A00"/><stop offset="100%" stop-color="#D32F2F"/></linearGradient>
+        <linearGradient id="sGold" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD54F"/><stop offset="100%" stop-color="#FFF9C4"/></linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="115" fill="url(#sBg)"/>
+      <circle cx="256" cy="220" r="140" fill="#FFF" opacity="0.1"/><circle cx="256" cy="220" r="100" fill="#FFF" opacity="0.2"/><circle cx="256" cy="220" r="60" fill="#FFF" opacity="0.4"/>
+      <rect x="244" y="140" width="24" height="160" rx="12" fill="url(#sGold)"/><path d="M256 70l14 30h-28z" fill="url(#sGold)"/><ellipse cx="256" cy="130" rx="45" ry="35" fill="url(#sGold)"/><ellipse cx="256" cy="130" rx="55" ry="15" fill="#FFB300" opacity="0.8"/>
+      <path d="M140 370Q256 420 372 370l8 40Q256 460 132 410z" fill="#FFF" opacity="0.95"/><path d="M140 360Q256 410 372 360v20Q256 430 140 380z" fill="#EEE"/><line x1="256" y1="390" x2="256" y2="445" stroke="#D32F2F" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+    </svg>
+    <h1 class="splash-title">श्री हनुमान चालीसा</h1>
+    <p class="splash-sub">Shri Hanuman Chalisa</p>
+    <div class="splash-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<script is:inline>
+  function dismissSplash() {
+    var s = document.getElementById('splash');
+    if (s) { s.classList.add('hide'); setTimeout(function() { s.remove(); }, 600); }
+  }
+  if (document.fonts) { document.fonts.ready.then(dismissSplash); }
+  else { window.addEventListener('load', dismissSplash); }
+  setTimeout(dismissSplash, 1500);
+</script>

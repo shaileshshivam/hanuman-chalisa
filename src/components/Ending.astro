@@ -1,0 +1,11 @@
+---
+interface Props {
+  lines: string[];
+}
+
+const { lines } = Astro.props;
+---
+
+<div class="ending">
+  {lines.map((line) => <Fragment>{line}<br /></Fragment>)}
+</div>
